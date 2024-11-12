@@ -1,0 +1,22 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "nitro build",
+    "dev": "nitro dev",
+    "prepare": "nitro prepare",
+    "preview": "node .output/server/index.mjs"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.14.0",
+    "@stylistic/eslint-plugin": "^2.10.1",
+    "@types/eslint__js": "^8.42.3",
+    "eslint": "^9.14.0",
+    "nitropack": "latest",
+    "typescript": "^5.6.3",
+    "typescript-eslint": "^8.14.0"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "lz-string": "^1.5.0"
+  }
+}
