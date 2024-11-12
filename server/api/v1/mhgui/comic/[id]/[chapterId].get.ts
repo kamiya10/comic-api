@@ -78,5 +78,7 @@ export default defineEventHandler(async (event) => {
     .replace('SMH.imgData(', '')
     .replace(').preInit();', '')) as UnpackedData;
 
+  setHeader(event, 'Content-Type', 'application/json; charset=utf-8');
+
   return parsedData.files.map((v) => 'https://eu1.hamreus.com' + parsedData.path + v + `?e=${parsedData.sl.e}&m=${parsedData.sl.m}`);
 });

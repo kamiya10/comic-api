@@ -56,6 +56,8 @@ export default defineEventHandler(async (event) => {
     })
     .toArray().reverse();
 
+  setHeader(event, 'Content-Type', 'application/json; charset=utf-8');
+
   return {
     name,
     alternativeName,

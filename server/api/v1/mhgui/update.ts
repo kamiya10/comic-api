@@ -39,6 +39,7 @@ export default defineEventHandler(async (event) => {
   if (!$) throw createError({
     status: 500,
   });
+
   const time = $('.latest-cont > h5')
     .map((_, el) => {
       return $(el)
@@ -58,7 +59,7 @@ export default defineEventHandler(async (event) => {
             const a = li.find('p > a');
             const tt = li.find('.tt');
 
-            let thumbnail = img.attr('data-src');
+            let thumbnail = img.attr('src') ?? img.attr('data-src');
             if (thumbnail) {
               thumbnail = 'https:' + thumbnail;
             }
@@ -71,17 +72,19 @@ export default defineEventHandler(async (event) => {
             const id = url?.split('/').at(-2);
 
             return {
-              id,
-              title: a.text(),
-              status: tt.text(),
-              url,
-              thumbnail,
+              id: id ?? '',
+              title: a.text() ?? '',
+              status: tt.text() ?? '',
+              url: url ?? '',
+              thumbnail: thumbnail ?? '',
             };
           })
           .toArray(),
       ];
     })
     .toArray();
+
+  setHeader(event, 'Content-Type', 'application/json; charset=utf-8');
 
   return Object.fromEntries(zip(
     time,
