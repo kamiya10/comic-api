@@ -3,23 +3,17 @@ import LZString from 'lz-string';
 
 const unpack = (p: string, a: number, c: number, k: string[], e: (c: number) => string, d: Record<string, string>): string => {
   e = function (c) {
-    return (
-      c < a
-        ? ''
-        : e(c / a)
-    )
-    + (
-      (c = c % a) > 35
+    return (c < a ? '' : e(~~(c / a)))
+      + ((c = c % a) > 35
         ? String.fromCharCode(c + 29)
-        : c.toString(36)
-    );
+        : c.toString(36));
   };
 
   while (c--) {
     d[e(c)] = k[c] || e(c);
   }
 
-  return p.replace(new RegExp('\\b\\w+\\b', 'g'), (e) => d[e]);
+  return p.replace(/\b\w+\b/g, (n: string) => d[n]);
 };
 
 interface UnpackedData {

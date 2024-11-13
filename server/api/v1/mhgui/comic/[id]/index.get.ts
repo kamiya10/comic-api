@@ -59,6 +59,7 @@ export default defineEventHandler(async (event) => {
   setHeader(event, 'Content-Type', 'application/json; charset=utf-8');
 
   return {
+    id,
     name,
     alternativeName,
     intro,
