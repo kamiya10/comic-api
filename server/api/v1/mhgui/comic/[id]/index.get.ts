@@ -1,7 +1,6 @@
 import { load } from 'cheerio';
 
 import type { CheerioAPI } from 'cheerio';
-import type { Text } from 'domhandler';
 
 const cache = new Map<string, CheerioAPI>();
 const lastFetchTimestamp = new Map<string, number>();
@@ -36,27 +35,44 @@ export default defineEventHandler(async (event) => {
   const alternativeName = $('.book-title > h2').text();
   const intro = $('#intro-all').text();
 
-  const chapters = $('.chapter-list > ul > li > a')
+  const chapterCategory = $('.chapter > h4')
+    .map((_, el) => $(el).text())
+    .toArray();
+
+  const chapters = $('.chapter > .chapter-list')
     .map((_, el) => {
-      const a = $(el);
-      const name = (a.find('span').contents()[0] as Text).data;
-      const page = Number.parseInt(a.find('i').text(), 10);
+      return [
+        $(el)
+          .children('ul')
+          .map((_, el) => {
+            const ul = $(el);
 
-      let url = a.attr('href');
-      if (url) {
-        url = 'https://tw.manhuagui.com' + url;
-      }
+            return ul
+              .find('li > a')
+              .map((_, el) => {
+                const a = $(el);
+                const name = a.attr('title');
+                const page = Number.parseInt(a.find('i').text(), 10);
 
-      const id = url?.split('/').at(-1)?.split('.')[0];
+                let url = a.attr('href');
+                if (url) {
+                  url = 'https://tw.manhuagui.com' + url;
+                }
 
-      return {
-        id,
-        name,
-        page,
-        url,
-      };
-    })
-    .toArray().reverse();
+                const id = url?.split('/').at(-1)?.split('.')[0];
+
+                return {
+                  id,
+                  name,
+                  page,
+                  url,
+                };
+              })
+              .toArray()
+              .reverse();
+          }).toArray(),
+      ];
+    }).toArray();
 
   setHeader(event, 'Content-Type', 'application/json; charset=utf-8');
 
@@ -65,6 +81,6 @@ export default defineEventHandler(async (event) => {
     name,
     alternativeName,
     intro,
-    chapters,
+    chapters: Object.fromEntries(zip(chapterCategory, chapters)),
   };
 });
