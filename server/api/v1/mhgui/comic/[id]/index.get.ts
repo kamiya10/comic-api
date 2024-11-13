@@ -1,4 +1,6 @@
-import { load, type CheerioAPI } from 'cheerio';
+import { load } from 'cheerio';
+
+import type { CheerioAPI } from 'cheerio';
 import type { Text } from 'domhandler';
 
 const cache = new Map<string, CheerioAPI>();

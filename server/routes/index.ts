@@ -1,3 +1,5 @@
-export default eventHandler((event) => {
-  return "Start by editing <code>server/routes/index.ts</code>.";
+export default eventHandler(() => {
+  throw createError({
+    status: 404,
+  });
 });

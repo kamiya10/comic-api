@@ -1,4 +1,5 @@
 import { load } from 'cheerio';
+
 import type { CheerioAPI } from 'cheerio';
 
 interface UpdateRecord<T = unknown> {

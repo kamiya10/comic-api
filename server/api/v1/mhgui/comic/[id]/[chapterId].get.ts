@@ -1,5 +1,8 @@
-import { load, type CheerioAPI } from 'cheerio';
+import { load } from 'cheerio';
+
 import LZString from 'lz-string';
+
+import type { CheerioAPI } from 'cheerio';
 
 const unpack = (p: string, a: number, c: number, k: string[], e: (c: number) => string, d: Record<string, string>): string => {
   e = function (c) {
