@@ -2,6 +2,14 @@ import { load } from 'cheerio';
 
 import type { CheerioAPI } from 'cheerio';
 
+interface APIPartialComicData {
+  id: string;
+  title: string;
+  status: string;
+  url: string;
+  thumbnail: string;
+}
+
 interface UpdateRecord<T = unknown> {
   d7: T;
   d15: T;
@@ -41,7 +49,7 @@ export default defineEventHandler(async (event) => {
     status: 500,
   });
 
-  const time = $('.latest-cont > h5')
+  const time: string[] = $('.latest-cont > h5')
     .map((_, el) => {
       return $(el)
         .text()
@@ -49,7 +57,7 @@ export default defineEventHandler(async (event) => {
     })
     .toArray();
 
-  const data = $('.latest-cont > .latest-list > ul')
+  const data: APIPartialComicData[][] = $('.latest-cont > .latest-list > ul')
     .map((_, ul) => {
       return [
         $(ul)
@@ -72,12 +80,19 @@ export default defineEventHandler(async (event) => {
 
             const id = url?.split('/').at(-2);
 
+            if (!id) {
+              console.error('/v1/mhgui/update id is not defined.');
+              throw createError({
+                status: 502,
+              });
+            }
+
             return {
-              id: id ?? '',
+              id: id,
               title: a.text() ?? '',
               status: tt.text() ?? '',
-              url: url ?? '',
-              thumbnail: thumbnail ?? '',
+              url: `https://tw.manhuagui.com/comic/${id}`,
+              thumbnail: `https://cf.mhgui.com/cpic/m/${id}.jpg`,
             };
           })
           .toArray(),
