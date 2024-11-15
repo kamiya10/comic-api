@@ -81,8 +81,6 @@ export default defineEventHandler(async (event) => {
     name,
     alternativeName,
     intro,
-    url: `https://tw.manhuagui.com/comic/${id}`,
-    thumbnail: `https://cf.mhgui.com/cpic/m/${id}.jpg`,
     chapters: Object.fromEntries(zip(chapterCategory, chapters)),
   };
 });

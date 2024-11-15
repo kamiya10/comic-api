@@ -6,8 +6,6 @@ interface APIPartialComicData {
   id: string;
   title: string;
   status: string;
-  url: string;
-  thumbnail: string;
 }
 
 interface UpdateRecord<T = unknown> {
@@ -91,8 +89,6 @@ export default defineEventHandler(async (event) => {
               id: id,
               title: a.text() ?? '',
               status: tt.text() ?? '',
-              url: `https://tw.manhuagui.com/comic/${id}`,
-              thumbnail: `https://cf.mhgui.com/cpic/m/${id}.jpg`,
             };
           })
           .toArray(),
