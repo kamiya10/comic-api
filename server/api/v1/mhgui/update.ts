@@ -35,7 +35,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  if (!cache[d] || Date.now() - lastFetchTimestamp[d] > 10_000) {
+  if (!cache[d] || Date.now() - lastFetchTimestamp[d] > 90_000) {
     cache[d] = await $fetch(`https://tw.manhuagui.com/update/${d}.html`, {
       parseResponse: load,
     });

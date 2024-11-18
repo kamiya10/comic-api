@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  if (!cache.has(id) || Date.now() - (lastFetchTimestamp.get(id) ?? 0) > 10_000) {
+  if (!cache.has(id) || Date.now() - (lastFetchTimestamp.get(id) ?? 0) > 90_000) {
     cache.set(
       id,
       await $fetch(`https://tw.manhuagui.com/comic/${id}/`, {
