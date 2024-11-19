@@ -75,6 +75,7 @@ export default defineEventHandler(async (event) => {
     }).toArray();
 
   setHeader(event, 'Content-Type', 'application/json; charset=utf-8');
+  setHeader(event, 'Access-Control-Allow-Origin', '*');
 
   return {
     id,

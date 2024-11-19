@@ -62,12 +62,22 @@ export default defineEventHandler(async (event) => {
     throw new Error('variable not exists');
   }
 
-  const variableScript = ''
-    + '['
-    + matches[1].replace('[\'\\x73\\x70\\x6c\\x69\\x63\'](\'\\x7c\')', '')
-    + ']';
+  const paramMatches
+    = matches[1]
+      .replace('[\'\\x73\\x70\\x6c\\x69\\x63\'](\'\\x7c\')', '')
+      .matchAll(/('(?:[^']*)')|([^,]+)/gi);
 
-  const [p, a, c, k, e, d] = eval(variableScript) as [string, number, number, string, (c: number) => string, Record<string, string>];
+  const params: unknown[] = [];
+
+  for (const paramMatch of paramMatches) {
+    const json = paramMatch[0]
+      .replaceAll('"', '\\"')
+      .replaceAll('\'', '"');
+
+    params.push(JSON.parse(json));
+  }
+
+  const [p, a, c, k, e, d] = params as [string, number, number, string, (c: number) => string, Record<string, string>];
 
   const unpackedData = unpack(p, a, c, LZString.decompressFromBase64(k).split('|'), e, d);
 
@@ -76,6 +86,7 @@ export default defineEventHandler(async (event) => {
     .replace(').preInit();', '')) as UnpackedData;
 
   setHeader(event, 'Content-Type', 'application/json; charset=utf-8');
+  setHeader(event, 'Access-Control-Allow-Origin', '*');
 
   return parsedData.files.map((v) => 'https://eu1.hamreus.com' + parsedData.path + v + `?e=${parsedData.sl.e}&m=${parsedData.sl.m}`);
 });
