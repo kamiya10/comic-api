@@ -35,8 +35,11 @@ export default defineEventHandler(async (event) => {
 
       const status = li.find('.tt').text();
       const title = li.find('dt > a').text();
+      
+      let intro = li.find('.intro > *').text().trim();
+      intro = intro.substring(3, intro.length - 4);
 
-      return { id, title, status };
+      return { id, title, status, intro };
     }).toArray();
 
   setHeader(event, 'Content-Type', 'application/json; charset=utf-8');
